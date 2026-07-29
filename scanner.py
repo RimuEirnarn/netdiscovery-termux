@@ -141,7 +141,7 @@ def set_luna_rewrite(new_ip: str) -> None:
 
     last_ip_path = Path(LAST_IP_FILE)
     if last_ip_path.exists():
-        last_ip = last_ip_path.read_text().strip()
+        last_ip = last_ip_path.read_text(encoding='utf-8').strip()
         if last_ip == new_ip:
             logging.info("IP unchanged (%s), skipping NextDNS update", new_ip)
             return
@@ -150,7 +150,7 @@ def set_luna_rewrite(new_ip: str) -> None:
         delete_rewrite(entry_id)
 
     create_rewrite(new_ip)
-    last_ip_path.write_text(new_ip)
+    last_ip_path.write_text(new_ip, encoding='utf-8')
 
 
 def main() -> int:
@@ -169,7 +169,7 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         sys.exit(main())
-    except Exception as exc:
+    except Exception as exc: # pylint: disable=broad-exception-caught
         logging.error("%s", exc)
         print(exc, file=sys.stderr)
         sys.exit(1)
