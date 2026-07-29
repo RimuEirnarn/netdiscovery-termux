@@ -22,7 +22,6 @@ from config import (
 EXPECTED_CONNECTION = {"connection": "LUNA/Rimu Aerisya"}
 
 logging.basicConfig(
-    filename=LOG_FILE,
     level=logging.INFO,
     format="%(asctime)s [nextdns] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
@@ -129,6 +128,7 @@ def create_rewrite(ip: str) -> None:
         method="POST",
         headers={"Content-Type": "application/json", "X-Api-Key": NEXTDNS_API_KEY},
     )
+    logging.info("Pushing to %s!", NEXTDNS_PROFILE_ID)
     with urllib.request.urlopen(request, timeout=10) as response:
         body = response.read().decode("utf-8")
     logging.info("Created rewrite %s -> %s: %s", NEXTDNS_REWRITE_HOSTNAME, ip, body)
