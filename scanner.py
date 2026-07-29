@@ -20,6 +20,7 @@ from config import (
 )
 
 EXPECTED_CONNECTION = {"connection": "LUNA/Rimu Aerisya"}
+UserAgent = "NetDiscoveryTermux/0.0.1 (+https://github.com/RimuEirnarn/netdiscovery-termux)"
 
 logging.basicConfig(
     level=logging.INFO,
@@ -101,7 +102,7 @@ def scan_nearby_devices() -> str:
 def find_rewrite_ids() -> list[str]:
     request = urllib.request.Request(
         f"https://api.nextdns.io/profiles/{NEXTDNS_PROFILE_ID}/rewrites",
-        headers={"X-Api-Key": NEXTDNS_API_KEY},
+        headers={"X-Api-Key": NEXTDNS_API_KEY, 'User-Agent': UserAgent},
     )
     with urllib.request.urlopen(request, timeout=10) as response:
         body = response.read().decode("utf-8")
@@ -113,7 +114,7 @@ def delete_rewrite(entry_id: str) -> None:
     request = urllib.request.Request(
         f"https://api.nextdns.io/profiles/{NEXTDNS_PROFILE_ID}/rewrites/{entry_id}",
         method="DELETE",
-        headers={"X-Api-Key": NEXTDNS_API_KEY},
+        headers={"X-Api-Key": NEXTDNS_API_KEY, "User-Agent": UserAgent},
     )
     with urllib.request.urlopen(request, timeout=10):
         pass
@@ -126,7 +127,7 @@ def create_rewrite(ip: str) -> None:
         f"https://api.nextdns.io/profiles/{NEXTDNS_PROFILE_ID}/rewrites",
         data=payload,
         method="POST",
-        headers={"Content-Type": "application/json", "X-Api-Key": NEXTDNS_API_KEY},
+        headers={"Content-Type": "application/json", "X-Api-Key": NEXTDNS_API_KEY, "User-Agent": UserAgent},
     )
     logging.info("Pushing to %s!", NEXTDNS_PROFILE_ID)
     with urllib.request.urlopen(request, timeout=10) as response:
